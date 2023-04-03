@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using Photon.Pun;
 
 public class Game : MonoBehaviourPunCallbacks, IPunObservable
 {
+    [SerializeField] TextMeshProUGUI waitPlayersText;
     [SerializeField] private GameObject _playerPrefab;
 
     [SerializeField] private bool _gameStarted;
@@ -26,7 +28,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        
+        waitPlayersText.text = "Игроков: " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -40,6 +42,11 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
         {
             // Network player, receive data
             _gameStarted = (bool)stream.ReceiveNext();
+
+            if (_gameStarted)
+            {
+                waitPlayersText.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -49,6 +56,9 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
 
         _gameStarted = state;
 
-        //Rpc send to clients?
+        if (_gameStarted)
+        {
+            waitPlayersText.gameObject.SetActive(false);
+        }
     }
 }
