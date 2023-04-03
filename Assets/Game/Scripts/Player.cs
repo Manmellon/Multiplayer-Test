@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviourPunCallbacks, IPunObservable
 {
     [Header("Components")]
     [SerializeField] private PhotonView photonView;
@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     [Header("Gameplay")]
     [SerializeField] private float maxHealth;
     [SerializeField] private float curHealth;
+
+    [SerializeField] private bool isFiring;
 
     // Start is called before the first frame update
     void Start()
@@ -63,5 +65,23 @@ public class Player : MonoBehaviour
         }
 
         _rigidbody.velocity = new Vector2(horizontalInput, verticalInput).normalized * walkSpeed;
+
+        healthSlider.value = curHealth;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(isFiring);
+            stream.SendNext(curHealth);
+        }
+        else
+        {
+            // Network player, receive data
+            this.isFiring = (bool)stream.ReceiveNext();
+            this.curHealth = (float)stream.ReceiveNext();
+        }
     }
 }
