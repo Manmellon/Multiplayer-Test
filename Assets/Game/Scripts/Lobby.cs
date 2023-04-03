@@ -25,6 +25,9 @@ public class Lobby : MonoBehaviourPunCallbacks
         createRoomButton.onClick.AddListener( () => CreateRoom() );
         joinRoomButton.onClick.AddListener( () => JoinRoom() );
         exitButton.onClick.AddListener( () => QuitGame() );
+
+        usernameInputField.text = PlayerPrefs.GetString("playerName");
+        usernameInputField.onValueChanged.AddListener( (value) => { PlayerPrefs.SetString("playerName", value); PhotonNetwork.NickName = value; } );
     }
 
     public void CreateRoom()

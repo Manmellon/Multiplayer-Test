@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
 
         healthSlider.maxValue = maxHealth;
         healthSlider.value = curHealth;
+
+        nameText.text = photonView.Owner.NickName;
     }
 
     // Update is called once per frame
