@@ -38,12 +38,19 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         healthSlider.value = curHealth;
 
         nameText.text = photonView.Owner.NickName;
+
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            Game.singleton.SetGameStarted(true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!photonView.IsMine) return;
+
+        if (!Game.singleton.GameStarted) return;
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");

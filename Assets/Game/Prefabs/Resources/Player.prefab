@@ -349,7 +349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f26bc92e06d81478090c0693c7727a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  photonView: {fileID: 1588635530499198930}
   _animator: {fileID: 1588635530499198957}
   spriteRenderer: {fileID: 1588635530499198958}
   _collider: {fileID: 1588635530499198959}
