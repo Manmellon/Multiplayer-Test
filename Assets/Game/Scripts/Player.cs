@@ -8,7 +8,7 @@ using Photon.Pun;
 public class Player : MonoBehaviourPunCallbacks, IPunObservable
 {
     [Header("Components")]
-    [SerializeField] private PhotonView photonView;
+    //[SerializeField] private PhotonView photonView;
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Collider2D _collider;

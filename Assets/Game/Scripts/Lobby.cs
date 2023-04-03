@@ -27,6 +27,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         exitButton.onClick.AddListener( () => QuitGame() );
 
         usernameInputField.text = PlayerPrefs.GetString("playerName");
+        PhotonNetwork.NickName = usernameInputField.text;
         usernameInputField.onValueChanged.AddListener( (value) => { PlayerPrefs.SetString("playerName", value); PhotonNetwork.NickName = value; } );
     }
 
