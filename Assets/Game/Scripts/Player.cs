@@ -76,12 +76,14 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             // We own this player: send the others our data
             stream.SendNext(isFiring);
             stream.SendNext(curHealth);
+            stream.SendNext(spriteRenderer.flipX);
         }
         else
         {
             // Network player, receive data
-            this.isFiring = (bool)stream.ReceiveNext();
-            this.curHealth = (float)stream.ReceiveNext();
+            isFiring = (bool)stream.ReceiveNext();
+            curHealth = (float)stream.ReceiveNext();
+            spriteRenderer.flipX = (bool)stream.ReceiveNext();
         }
     }
 }
