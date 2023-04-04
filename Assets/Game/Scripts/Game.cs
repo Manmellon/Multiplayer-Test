@@ -6,8 +6,10 @@ using Photon.Pun;
 
 public class Game : MonoBehaviourPunCallbacks, IPunObservable
 {
-    [SerializeField] TextMeshProUGUI waitPlayersText;
+    [SerializeField] private TextMeshProUGUI waitPlayersText;
     [SerializeField] private GameObject _playerPrefab;
+
+    [SerializeField] public TextMeshProUGUI coinsText;
 
     [SerializeField] private bool _gameStarted;
     public bool GameStarted => _gameStarted;
@@ -28,7 +30,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        waitPlayersText.text = "Игроков: " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers;
+        waitPlayersText.text = "Ожидание игроков: " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

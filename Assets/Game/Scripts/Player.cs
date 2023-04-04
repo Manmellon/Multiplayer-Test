@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 
-public class Player : MonoBehaviourPunCallbacks, IPunObservable
+public class Player : MonoBehaviourPun, IPunObservable
 {
     [Header("Components")]
     //[SerializeField] private PhotonView photonView;
@@ -34,6 +34,9 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField] private bool isDead;
 
+    [SerializeField] private int _coins;
+    public int Coins => _coins;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +62,8 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         healthSlider.value = curHealth;
 
         if (!photonView.IsMine) return;
+
+        Game.singleton.coinsText.text = Coins.ToString();
 
         if (!Game.singleton.GameStarted) return;
 
@@ -134,5 +139,10 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
 
         //PhotonNetwork.Destroy(gameObject);
         Destroy(gameObject);
+    }
+
+    public void AddCoin()
+    {
+        _coins++;
     }
 }

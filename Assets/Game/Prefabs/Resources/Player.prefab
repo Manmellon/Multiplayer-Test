@@ -364,6 +364,7 @@ MonoBehaviour:
   _bulletPrefab: {fileID: 737034814998966572, guid: f8ff201af4142ae4486c1069a47a9b64, type: 3}
   _fireSource: {fileID: 5386579234671193291}
   isDead: 0
+  _coins: 0
 --- !u!1 &2204782250860066634
 GameObject:
   m_ObjectHideFlags: 0

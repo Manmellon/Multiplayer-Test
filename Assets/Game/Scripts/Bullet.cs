@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Bullet : MonoBehaviourPunCallbacks
+public class Bullet : MonoBehaviourPun
 {
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private float speed = 10.0f;
