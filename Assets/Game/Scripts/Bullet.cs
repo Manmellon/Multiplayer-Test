@@ -12,6 +12,8 @@ public class Bullet : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        //photonView.TransferOwnership(PhotonNetwork.MasterClient);
+
         _rigidbody2D.velocity = transform.right * speed;
     }
 
@@ -23,21 +25,33 @@ public class Bullet : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (PhotonNetwork.IsMasterClient && collision.CompareTag("Player") && !photonView.AmOwner)
+        if (collision.CompareTag("Player"))
         {
             Player player = collision.gameObject.GetComponentInParent<Player>();
             if (player == null) return;
 
+            if (player.photonView.Owner.Equals(photonView.Owner)) return;
+
+            /*if (PhotonNetwork.IsMasterClient)
+            {
+                player.DealDamage(damage);
+                //PhotonNetwork.Destroy(gameObject);
+            }*/
             player.DealDamage(damage);
-            PhotonNetwork.Destroy(gameObject);
+
+            Destroy(gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (PhotonNetwork.IsMasterClient && collision.gameObject.layer == LayerMask.NameToLayer("GameZone"))
+        /*if (PhotonNetwork.IsMasterClient && collision.gameObject.layer == LayerMask.NameToLayer("GameZone"))
         {
             PhotonNetwork.Destroy(gameObject);
+        }*/
+        if (collision.gameObject.layer == LayerMask.NameToLayer("GameZone"))
+        {
+            Destroy(gameObject);
         }
     }
 }
