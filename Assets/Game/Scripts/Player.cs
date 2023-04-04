@@ -29,6 +29,8 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField] private bool isFiring;
 
+    [SerializeField] private GameObject _bulletPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +74,12 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         _rigidbody.velocity = new Vector2(horizontalInput, verticalInput).normalized * walkSpeed;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            float rotationAngle = Mathf.Rad2Deg * Mathf.Atan2(prevVertical, prevHorizontal);
+            PhotonNetwork.Instantiate(_bulletPrefab.name, transform.position, Quaternion.Euler(0, 0, rotationAngle));
+        }
 
         healthSlider.value = curHealth;
     }
