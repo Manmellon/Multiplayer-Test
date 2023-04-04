@@ -32,6 +32,8 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _fireSource;
 
+    [SerializeField] private bool isDead;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +43,9 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         healthSlider.value = curHealth;
 
         nameText.text = photonView.Owner.NickName;
+
+        prevHorizontal = 0;
+        prevVertical = -0.1f;
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= PhotonNetwork.CurrentRoom.MaxPlayers)
         {
@@ -54,6 +59,8 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         if (!photonView.IsMine) return;
 
         if (!Game.singleton.GameStarted) return;
+
+        if (isDead) return;
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -93,6 +100,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(isFiring);
             stream.SendNext(curHealth);
             stream.SendNext(spriteRenderer.flipX);
+            stream.SendNext(isDead);
         }
         else
         {
@@ -100,6 +108,28 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             isFiring = (bool)stream.ReceiveNext();
             curHealth = (float)stream.ReceiveNext();
             spriteRenderer.flipX = (bool)stream.ReceiveNext();
+            isDead = (bool)stream.ReceiveNext();
         }
+    }
+
+    public void DealDamage(float damage)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        curHealth = Mathf.Clamp(curHealth - damage, 0, maxHealth);
+
+        if (curHealth <= 0)
+        {
+            _animator.Play("Death");
+            isDead = true;
+            _collider.enabled = false;
+        }
+    }
+
+    public void DestroyAfterDeathAnimation()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        PhotonNetwork.Destroy(gameObject);
     }
 }
