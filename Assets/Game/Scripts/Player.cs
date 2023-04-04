@@ -72,6 +72,9 @@ public class Player : MonoBehaviourPun, IPunObservable
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
+        horizontalInput = Game.singleton.fixedJoystick.Horizontal;
+        verticalInput = Game.singleton.fixedJoystick.Vertical;
+
         spriteRenderer.flipX = horizontalInput > 0 || prevHorizontal > 0;
 
         if (horizontalInput != 0 || verticalInput != 0)

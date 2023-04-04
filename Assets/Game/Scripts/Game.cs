@@ -10,6 +10,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private GameObject _playerPrefab;
 
     [SerializeField] public TextMeshProUGUI coinsText;
+    [SerializeField] public FixedJoystick fixedJoystick;
 
     [SerializeField] private bool _gameStarted;
     public bool GameStarted => _gameStarted;
