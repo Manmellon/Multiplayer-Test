@@ -69,11 +69,11 @@ public class Player : MonoBehaviourPun, IPunObservable
 
         if (isDead) return;
 
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        //float horizontalInput = Input.GetAxis("Horizontal");
+        //float verticalInput = Input.GetAxis("Vertical");
 
-        horizontalInput = Game.singleton.fixedJoystick.Horizontal;
-        verticalInput = Game.singleton.fixedJoystick.Vertical;
+        float horizontalInput = Game.singleton.fixedJoystick.Horizontal;
+        float verticalInput = Game.singleton.fixedJoystick.Vertical;
 
         spriteRenderer.flipX = horizontalInput > 0 || prevHorizontal > 0;
 
@@ -87,8 +87,8 @@ public class Player : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            _animator.SetFloat("SpeedX", prevHorizontal / 2);
-            _animator.SetFloat("SpeedY", prevVertical / 2);
+            _animator.SetFloat("SpeedX", prevHorizontal / 20);
+            _animator.SetFloat("SpeedY", prevVertical / 20);
         }
 
         _rigidbody.velocity = new Vector2(horizontalInput, verticalInput).normalized * walkSpeed;
