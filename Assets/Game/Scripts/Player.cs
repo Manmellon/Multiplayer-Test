@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,7 +7,6 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviourPun, IPunObservable
 {
     [Header("Components")]
-    //[SerializeField] private PhotonView photonView;
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Collider2D _collider;
@@ -64,17 +61,14 @@ public class Player : MonoBehaviourPun, IPunObservable
 
         if (!photonView.IsMine) return;
 
-        Game.singleton.coinsText.text = Coins.ToString();
+        UIGame.singleton.UpdateCoins(Coins);
 
         if (!Game.singleton.GameStarted) return;
 
         if (isDead) return;
 
-        //float horizontalInput = Input.GetAxis("Horizontal");
-        //float verticalInput = Input.GetAxis("Vertical");
-
-        float horizontalInput = Game.singleton.fixedJoystick.Horizontal;
-        float verticalInput = Game.singleton.fixedJoystick.Vertical;
+        float horizontalInput = UIGame.singleton.FixedJoystick.Horizontal;
+        float verticalInput = UIGame.singleton.FixedJoystick.Vertical;
 
         spriteRenderer.flipX = horizontalInput > 0 || prevHorizontal > 0;
 
@@ -98,7 +92,6 @@ public class Player : MonoBehaviourPun, IPunObservable
         {
             float rotationAngle = Mathf.Rad2Deg * Mathf.Atan2(prevVertical, prevHorizontal);
             PhotonNetwork.Instantiate(_bulletPrefab.name, _fireSource.position, Quaternion.Euler(0, 0, rotationAngle));
-            //PhotonNetwork.InstantiateRoomObject(_bulletPrefab.name, _fireSource.position, Quaternion.Euler(0, 0, rotationAngle));
         }
     }
 
@@ -125,8 +118,6 @@ public class Player : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void DealDamage(float damage)
     {
-        //if (!PhotonNetwork.IsMasterClient) return;
-
         curHealth = Mathf.Clamp(curHealth - damage, 0, maxHealth);
 
         if (curHealth <= 0)
@@ -139,9 +130,6 @@ public class Player : MonoBehaviourPun, IPunObservable
 
     public void DestroyAfterDeathAnimation()
     {
-        //if (!PhotonNetwork.IsMasterClient) return;
-
-        //PhotonNetwork.Destroy(gameObject);
         Destroy(gameObject);
     }
 

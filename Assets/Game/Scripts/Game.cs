@@ -1,17 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+
 using Photon.Pun;
 
 public class Game : MonoBehaviourPunCallbacks, IPunObservable
 {
-    [SerializeField] private TextMeshProUGUI waitPlayersText;
     [SerializeField] private GameObject _playerPrefab;
-
-    [SerializeField] public TextMeshProUGUI coinsText;
-    [SerializeField] public FixedJoystick fixedJoystick;
-
     [SerializeField] private bool _gameStarted;
     public bool GameStarted => _gameStarted;
 
@@ -31,7 +24,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        waitPlayersText.text = "ќжидание игроков: " + PhotonNetwork.CurrentRoom.PlayerCount + "/" + PhotonNetwork.CurrentRoom.MaxPlayers;
+        
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -48,7 +41,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
 
             if (_gameStarted)
             {
-                waitPlayersText.gameObject.SetActive(false);
+                UIGame.singleton.ShowWaitText(false);
             }
         }
     }
@@ -61,7 +54,7 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
 
         if (_gameStarted)
         {
-            waitPlayersText.gameObject.SetActive(false);
+            UIGame.singleton.ShowWaitText(false);
         }
     }
 }
