@@ -2,61 +2,50 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.UI;
-using TMPro;
 
 public class Lobby : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private TMP_InputField usernameInputField;
-    [SerializeField] private TMP_InputField creatingRoomNameInputField;
-    [SerializeField] private TMP_InputField joiningRoomNameInputField;
-    [SerializeField] private TextMeshProUGUI infoText;
-    [SerializeField] private Button createRoomButton;
-    [SerializeField] private Button joinRoomButton;
-    [SerializeField] private Button exitButton;
+    public static Lobby singleton;
 
-    [SerializeField] private float infoTextShowSeconds = 3.0f;
+    private void Awake()
+    {
+        if (singleton == null) singleton = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        createRoomButton.onClick.AddListener( () => CreateRoom() );
-        joinRoomButton.onClick.AddListener( () => JoinRoom() );
-        exitButton.onClick.AddListener( () => QuitGame() );
 
-        usernameInputField.text = PlayerPrefs.GetString("playerName");
-        PhotonNetwork.NickName = usernameInputField.text;
-        usernameInputField.onValueChanged.AddListener( (value) => { PlayerPrefs.SetString("playerName", value); PhotonNetwork.NickName = value; } );
     }
 
-    public void CreateRoom()
+    public void CreateRoom(string roomName)
     {
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 2;
 
-        PhotonNetwork.CreateRoom(creatingRoomNameInputField.text, roomOptions);
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         if (returnCode == 32766)
         {
-            SetInfoText("Комната с таким именем уже существует", true);
+            UILobby.singleton.SetInfoText("Комната с таким именем уже существует", true);
         }
         else
         {
-            SetInfoText(returnCode + ": " + message, true);
+            UILobby.singleton.SetInfoText(returnCode + ": " + message, true);
         }
     }
 
-    public void JoinRoom()
+    public void JoinRoom(string roomName)
     {
-        PhotonNetwork.JoinRoom(joiningRoomNameInputField.text);
+        PhotonNetwork.JoinRoom(roomName);
     }
 
     public override void OnJoinedRoom()
     {
-        SetInfoText("Производится вход в комнату " + joiningRoomNameInputField.text, false);
+        UILobby.singleton.SetInfoText("Производится вход в комнату " + UILobby.singleton.GetJoiningRoomName(), false);
         PhotonNetwork.LoadLevel("Game");
     }
 
@@ -64,38 +53,20 @@ public class Lobby : MonoBehaviourPunCallbacks
     {
         if (returnCode == 32765)
         {
-            SetInfoText("Комната заполнена", true);
+            UILobby.singleton.SetInfoText("Комната заполнена", true);
         }
         else if (returnCode == 32764)
         {
-            SetInfoText("Данная комната была закрыта", true);
+            UILobby.singleton.SetInfoText("Данная комната была закрыта", true);
         }
         else if (returnCode == 32758)
         {
-            SetInfoText("Комнаты с таким именем не существует", true);
+            UILobby.singleton.SetInfoText("Комнаты с таким именем не существует", true);
         }
         else
         {
-            SetInfoText(returnCode + ": " + message, true);
+            UILobby.singleton.SetInfoText(returnCode + ": " + message, true);
         }
-    }
-
-    public void SetInfoText(string message, bool error)
-    {
-        infoText.color = error ? Color.red : Color.green;
-
-        infoText.text = message;
-
-        StopCoroutine("HideInfoText");
-
-        StartCoroutine("HideInfoText");
-    }
-
-    IEnumerator HideInfoText()
-    {
-        yield return new WaitForSeconds(infoTextShowSeconds);
-
-        infoText.text = "";
     }
 
     public void QuitGame()
