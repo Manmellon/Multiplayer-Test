@@ -120,6 +120,12 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiate
         Game.singleton.AddPlayer(this);
     }
 
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player other)
+    {
+        if (photonView.Owner == other)
+            Game.singleton.RemovePlayer(this);
+    }
+
     [PunRPC]
     public void DealDamage(float damage)
     {
