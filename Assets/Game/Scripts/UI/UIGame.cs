@@ -31,6 +31,7 @@ public class UIGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _pauseButton.onClick.AddListener( () => _pauseScreen.SetActive(true) );
         _resumeButton.onClick.AddListener( () => _pauseScreen.SetActive(false) );
         _toLobbyButton.onClick.AddListener(() => PhotonNetwork.LoadLevel("Lobby") );
         _exitButton.onClick.AddListener( () => QuitFromGame() );
