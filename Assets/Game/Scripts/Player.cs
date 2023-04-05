@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviourPun, IPunObservable
 {
@@ -93,7 +94,7 @@ public class Player : MonoBehaviourPun, IPunObservable
 
         _rigidbody.velocity = new Vector2(horizontalInput, verticalInput).normalized * walkSpeed;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             float rotationAngle = Mathf.Rad2Deg * Mathf.Atan2(prevVertical, prevHorizontal);
             PhotonNetwork.Instantiate(_bulletPrefab.name, _fireSource.position, Quaternion.Euler(0, 0, rotationAngle));
