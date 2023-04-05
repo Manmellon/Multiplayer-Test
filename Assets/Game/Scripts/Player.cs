@@ -108,17 +108,17 @@ public class Player : MonoBehaviourPun, IPunObservable
         {
             // We own this player: send the others our data
             stream.SendNext(isFiring);
-            //stream.SendNext(curHealth);
             stream.SendNext(spriteRenderer.flipX);
             stream.SendNext(isDead);
+            stream.SendNext(Coins);
         }
         else
         {
             // Network player, receive data
             isFiring = (bool)stream.ReceiveNext();
-            //curHealth = (float)stream.ReceiveNext();
             spriteRenderer.flipX = (bool)stream.ReceiveNext();
             isDead = (bool)stream.ReceiveNext();
+            _coins = (int)stream.ReceiveNext();
         }
     }
 
