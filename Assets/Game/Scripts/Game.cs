@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using Photon.Pun;
@@ -5,6 +6,7 @@ using Photon.Pun;
 public class Game : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private BoxCollider2D _gameZoneCollider;
     [SerializeField] private bool _gameStarted;
     public bool GameStarted => _gameStarted;
 
@@ -18,7 +20,9 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.Instantiate(_playerPrefab.name, Vector3.zero, Quaternion.identity);
+        float posX = Random.Range(_gameZoneCollider.bounds.center.x - _gameZoneCollider.bounds.extents.x, _gameZoneCollider.bounds.center.x + _gameZoneCollider.bounds.extents.x);
+        float posY = Random.Range(_gameZoneCollider.bounds.center.y - _gameZoneCollider.bounds.extents.y, _gameZoneCollider.bounds.center.y + _gameZoneCollider.bounds.extents.y);
+        PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(posX, posY, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
