@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using Photon.Pun;
@@ -8,6 +9,9 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private BoxCollider2D _gameZoneCollider;
     [SerializeField] private bool _gameStarted;
     public bool GameStarted => _gameStarted;
+
+    [SerializeField] private List<Player> _alivePlayers = new List<Player>();
+    public List<Player> AlivePlayers => _alivePlayers;
 
     public static Game singleton;
 
@@ -21,7 +25,8 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
     {
         float posX = Random.Range(_gameZoneCollider.bounds.center.x - _gameZoneCollider.bounds.extents.x, _gameZoneCollider.bounds.center.x + _gameZoneCollider.bounds.extents.x);
         float posY = Random.Range(_gameZoneCollider.bounds.center.y - _gameZoneCollider.bounds.extents.y, _gameZoneCollider.bounds.center.y + _gameZoneCollider.bounds.extents.y);
-        PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(posX, posY, 0), Quaternion.identity);
+        Player player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(posX, posY, 0), Quaternion.identity).GetComponent<Player>();
+        _alivePlayers.Add(player);
     }
 
     // Update is called once per frame
@@ -58,6 +63,15 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
         if (_gameStarted)
         {
             UIGame.singleton.ShowWaitText(false);
+        }
+    }
+
+    public void RemovePlayer(Player player)
+    {
+        _alivePlayers.Remove(player);
+        if (_alivePlayers.Count <= 1)
+        {
+            UIGame.singleton.ShowGameOver(_alivePlayers.Count == 0);
         }
     }
 

@@ -130,6 +130,7 @@ public class Player : MonoBehaviourPun, IPunObservable
 
     public void DestroyAfterDeathAnimation()
     {
+        Game.singleton.RemovePlayer(this);
         Destroy(gameObject);
     }
 

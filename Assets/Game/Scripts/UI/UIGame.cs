@@ -52,4 +52,23 @@ public class UIGame : MonoBehaviour
     {
         coinsText.text = coins.ToString();
     }
+
+    public void ShowGameOver(bool draw)
+    {
+        _resumeButton.gameObject.SetActive(false);
+
+        if (draw)
+        {
+            _gameOverText.text = "Ничья. Все умерли";
+        }
+        else
+        {
+            _gameOverText.text = "Победитель - " + Game.singleton.AlivePlayers[0].photonView.Owner.NickName;
+            _gameOverText.text += "\nМонет собрано - " + Game.singleton.AlivePlayers[0].Coins;
+        }
+
+        _gameOverText.gameObject.SetActive(true);
+
+        _pauseScreen.SetActive(true);
+    }
 }
