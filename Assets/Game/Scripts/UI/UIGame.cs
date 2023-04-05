@@ -33,8 +33,8 @@ public class UIGame : MonoBehaviour
     {
         _pauseButton.onClick.AddListener( () => _pauseScreen.SetActive(true) );
         _resumeButton.onClick.AddListener( () => _pauseScreen.SetActive(false) );
-        _toLobbyButton.onClick.AddListener(() => PhotonNetwork.LoadLevel("Lobby") );
-        _exitButton.onClick.AddListener( () => QuitFromGame() );
+        _toLobbyButton.onClick.AddListener(() => { PhotonNetwork.LeaveRoom(); PhotonNetwork.LoadLevel("Lobby"); });
+        _exitButton.onClick.AddListener( () => Game.singleton.QuitFromGame() );
     }
 
     // Update is called once per frame
@@ -51,14 +51,5 @@ public class UIGame : MonoBehaviour
     public void UpdateCoins(int coins)
     {
         coinsText.text = coins.ToString();
-    }
-
-    public void QuitFromGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-         Application.Quit();
-#endif
     }
 }

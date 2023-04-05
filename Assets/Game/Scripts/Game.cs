@@ -57,4 +57,15 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
             UIGame.singleton.ShowWaitText(false);
         }
     }
+
+    public void QuitFromGame()
+    {
+        PhotonNetwork.LeaveRoom();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
+    }
 }
