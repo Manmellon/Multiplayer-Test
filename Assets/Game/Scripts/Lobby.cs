@@ -69,7 +69,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         }
     }
 
-    public void QuitGame()
+    public void QuitFromLobby()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

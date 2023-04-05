@@ -29,7 +29,7 @@ public class UILobby : MonoBehaviour
     {
         createRoomButton.onClick.AddListener(() => Lobby.singleton.CreateRoom(creatingRoomNameInputField.text));
         joinRoomButton.onClick.AddListener(() => Lobby.singleton.JoinRoom(joiningRoomNameInputField.text));
-        exitButton.onClick.AddListener(() => Lobby.singleton.QuitGame());
+        exitButton.onClick.AddListener(() => Lobby.singleton.QuitFromLobby());
 
         usernameInputField.text = PlayerPrefs.GetString("playerName");
         PhotonNetwork.NickName = usernameInputField.text;
