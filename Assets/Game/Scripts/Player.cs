@@ -88,7 +88,7 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiate
 
         _rigidbody.velocity = new Vector2(horizontalInput, verticalInput).normalized * walkSpeed;
 
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !TouchingUI())
         {
             float rotationAngle = Mathf.Rad2Deg * Mathf.Atan2(prevVertical, prevHorizontal);
             PhotonNetwork.Instantiate(_bulletPrefab.name, _fireSource.position, Quaternion.Euler(0, 0, rotationAngle));
@@ -148,5 +148,15 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiate
     public void AddCoin()
     {
         _coins++;
+    }
+
+    public bool TouchingUI()
+    {
+        bool result = false;
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            result |= EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId);
+        }
+        return result | EventSystem.current.IsPointerOverGameObject();//For mouse
     }
 }
