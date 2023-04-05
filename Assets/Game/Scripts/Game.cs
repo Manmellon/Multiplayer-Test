@@ -26,7 +26,6 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
         float posX = Random.Range(_gameZoneCollider.bounds.center.x - _gameZoneCollider.bounds.extents.x, _gameZoneCollider.bounds.center.x + _gameZoneCollider.bounds.extents.x);
         float posY = Random.Range(_gameZoneCollider.bounds.center.y - _gameZoneCollider.bounds.extents.y, _gameZoneCollider.bounds.center.y + _gameZoneCollider.bounds.extents.y);
         Player player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector3(posX, posY, 0), Quaternion.identity).GetComponent<Player>();
-        _alivePlayers.Add(player);
     }
 
     // Update is called once per frame
@@ -64,6 +63,11 @@ public class Game : MonoBehaviourPunCallbacks, IPunObservable
         {
             UIGame.singleton.ShowWaitText(false);
         }
+    }
+
+    public void AddPlayer(Player player)
+    {
+        _alivePlayers.Add(player);
     }
 
     public void RemovePlayer(Player player)

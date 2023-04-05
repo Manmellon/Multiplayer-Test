@@ -4,7 +4,7 @@ using TMPro;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviourPun, IPunObservable
+public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
 {
     [Header("Components")]
     [SerializeField] private Animator _animator;
@@ -113,6 +113,11 @@ public class Player : MonoBehaviourPun, IPunObservable
             isDead = (bool)stream.ReceiveNext();
             _coins = (int)stream.ReceiveNext();
         }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        Game.singleton.AddPlayer(this);
     }
 
     [PunRPC]
